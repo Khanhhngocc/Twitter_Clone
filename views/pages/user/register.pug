@@ -1,0 +1,19 @@
+extends ../../layouts/login-layout.pug 
+
+block content
+    .loginContainer 
+        h1 Register
+        form(action="", method="POST") 
+            if payload && payload.errorMessage
+                p.errorMessage #{payload.errorMessage}
+
+            input(type="text", name="firstName", placeholder="First name", value=payload && payload.firstName || "", required)
+            input(type="text", name="lastName", placeholder="Last name", value=payload && payload.lastName || "", required)
+            input(type="text", name="userName", placeholder="Username", value=payload && payload.userName || "", required)
+            input(type="email", name="email", placeholder="Email", value=payload && payload.email || "", required)
+            input(type="password", name="password", placeholder="Password", required)
+            input(type="password", name="passwordConf", placeholder="Confirm password", required)
+
+            input(type="submit", value="Register")
+
+        a(href="/user/register") Already have an account? Login here. 
