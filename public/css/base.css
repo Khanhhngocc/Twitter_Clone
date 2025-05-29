@@ -5,6 +5,8 @@
     --lightGray: rgb(230, 236, 240);
     --blueLight: #9BD1F9;
     --spacing: 15px;
+    --greyText:  rgb(101, 119, 134);
+    --greyButtonText: rgba(0, 0, 0, 0.34);
 }
 
 * {
@@ -13,5 +15,11 @@
     margin: 0;
     padding: 0;
     outline: none !important;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+    color: var(--greyButtonText);
 }
 
