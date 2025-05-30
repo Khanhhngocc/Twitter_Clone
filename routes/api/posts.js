@@ -7,4 +7,6 @@ router.get("/", controller.getPosts);
 
 router.post("/", controller.postPosts);
 
+router.patch("/:id/like", controller.patchPosts);
+
 module.exports = router;

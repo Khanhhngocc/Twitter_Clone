@@ -163,3 +163,10 @@ nav a:hover {
     color: var(--blue);
     border-radius: 50%;
 }
+
+
+
+
+.postButtonContainer.red button.active {
+    color: var(--red);
+}

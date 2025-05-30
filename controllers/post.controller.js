@@ -38,3 +38,31 @@ module.exports.postPosts = async(req, res) => {
         res.sendStatus(400);
     })
 } 
+
+//[PATCH] /api/posts/:id/like
+module.exports.patchPosts = async(req, res) => {
+    const postId = req.params.id;
+    let user = req.session.user;
+
+    let isLiked = user.likes && user.likes.includes(postId);
+
+    const option = isLiked ? "$pull" : "$addToSet";
+
+    //Insert user like
+    try {
+        user = await User.findByIdAndUpdate(user._id, { [option]: { likes: postId }}, { new: true });
+        req.session.user = user;          
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(400);
+    }
+    //Insert post like
+    try {
+        var post = await Post.findByIdAndUpdate(postId, { [option]: { likes: user._id }}, { new: true });
+    } catch (error) {
+        console.log(error);
+        res.sendStatus(400);
+    }
+
+    res.status(200).send(post);
+}

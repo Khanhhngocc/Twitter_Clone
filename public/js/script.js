@@ -46,6 +46,47 @@ if(postFormContainer) {
     })
 }
 
+// Like Button
+document.addEventListener("click", async(e) => {
+    if(e.target.closest(".likeButton")){
+        const button = e.target;
+        const postId = getPostIdFromElement(button);
+
+        try {
+            fetch(`/api/posts/${postId}/like`, {
+                method: "PATCH",
+            })
+            .then(response => response.json())
+            .then(postData => {
+                const span = button.querySelector('span');
+                if(span) {
+                    span.textContent = postData.likes.length || "";
+                    if(postData.likes.includes(userLoggedIn._id)) {
+                        button.classList.add("active");
+                    } else {
+                        button.classList.remove("active");
+                    }
+                }
+            })
+    
+        } catch (error) {
+            console.log(error)
+        }
+    }
+})
+
+// Root Element contain data-id
+function getPostIdFromElement(element) {
+    const rootElement = element.classList.contains("post") ? element : element.closest(".post");
+    const postId = rootElement.getAttribute("data-id");
+    if(postId === undefined) return alert("Post id undefined");
+    if (!postId) {
+        alert("Post id undefined");
+        return;
+    }
+    return postId;
+}
+
 function createPostHtml(postData) {
     const postedBy = postData.postedBy;
 
@@ -55,7 +96,9 @@ function createPostHtml(postData) {
     const displayName = postedBy.firstName + " " + postedBy.lastName;
     const timestamp = timeDifference(new Date(), new Date(postData.createdAt)); //Tại sao phải truyền new Date(postedBy.createdAt) mà không phải postedBy.createdAt?
 
-    return `<div class='post'>
+    const likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? "active" : ""
+
+    return `<div class='post' data-id='${postData._id}'>
                 <div class='mainContentContainer'>
                     <div class='userImageContainer'>
                         <img src='${postedBy.profilePic}'/>
@@ -80,9 +123,10 @@ function createPostHtml(postData) {
                                     <i class='fa fa-retweet'></i>
                                 </button>
                             </div>
-                            <div class='postButtonContainer'>
-                                <button>
+                            <div class='postButtonContainer red'>
+                                <button class='likeButton ${likeButtonActiveClass}'>
                                     <i class='fa fa-heart'></i>
+                                    <span>${postData.likes.length || ""}</span>
                                 </button>
                             </div>
                         </div>
