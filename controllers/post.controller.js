@@ -66,3 +66,42 @@ module.exports.patchPosts = async(req, res) => {
 
     res.status(200).send(post);
 }
+
+//[POST] /api/posts/:id/retweet
+module.exports.postRetweet = async(req, res) => {
+    const user = req.session.user;
+    const postId = req.params.id;
+
+    try {
+        var deletedPost = await Post.findOneAndDelete({postedBy: user._id, retweetData: postId})   
+    } catch (error) {
+        console.log(error)
+    }
+    const option = deletedPost == null ? "$addToSet" : "$pull";
+
+    var repost = deletedPost;
+
+    if(repost == null) {
+        repost = await Post.create({ postedBy: user._id, retweetData: postId})
+        .catch(error => {
+            console.log(error);
+            res.sendStatus(400)
+        })
+    }
+
+    //Insert user retweet
+    req.session.user = await User.findByIdAndUpdate({_id: user._id}, { [option]: {retweet: repost._id} }, {new: true})
+    .catch(error => {
+        console.log(error)
+        res.sendStatus(400)
+    })
+
+    //Insert post retweet
+    const post = await Post.findByIdAndUpdate(postId, { [option]: {retweetUsers: user._id} }, {new: true})
+    .catch(error => {
+        console.log(error)
+        res.sendStatus(400)
+    })
+
+    res.status(200).send(post);
+}

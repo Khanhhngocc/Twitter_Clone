@@ -9,4 +9,5 @@ router.post("/", controller.postPosts);
 
 router.patch("/:id/like", controller.patchPosts);
 
+router.post("/:id/retweet", controller.postRetweet);
 module.exports = router;

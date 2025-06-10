@@ -75,6 +75,33 @@ document.addEventListener("click", async(e) => {
     }
 })
 
+// Retweet Button
+document.addEventListener("click", async(e) => {
+    if(e.target.closest(".retweetButton")) {
+        const button = e.target;
+        const postId = getPostIdFromElement(button);
+
+        try {   
+            fetch(`/api/posts/${postId}/retweet`, {
+                method: "POST",
+            })
+            .then(response => response.json())
+            .then(postData => {
+                const span = button.querySelector("span");
+                if(span) {
+                    span.textContent = postData.retweetUsers.length || ""
+                    if(postData.retweetUsers.includes(userLoggedIn._id)) {
+                        button.classList.add("active");
+                    } else {
+                        button.classList.remove("active");
+                    }
+                }
+            })
+        } catch (error) {
+            console.log(error);
+        }
+    }
+})
 // Root Element contain data-id
 function getPostIdFromElement(element) {
     const rootElement = element.classList.contains("post") ? element : element.closest(".post");
@@ -88,6 +115,11 @@ function getPostIdFromElement(element) {
 }
 
 function createPostHtml(postData) {
+
+    let isRetweet = postData.retweetData !== undefined;
+    let retweetBy = isRetweet ? postData.postedBy.userName : null;
+    postData = isRetweet ? postData.retweetData : postData;
+
     const postedBy = postData.postedBy;
 
     if(postedBy._id === undefined) {
@@ -97,8 +129,22 @@ function createPostHtml(postData) {
     const timestamp = timeDifference(new Date(), new Date(postData.createdAt)); //Tại sao phải truyền new Date(postedBy.createdAt) mà không phải postedBy.createdAt?
 
     const likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? "active" : ""
+    const retweetButtonActiveClass = postData.retweetUsers.includes(userLoggedIn._id) ? "active" : "";
+
+    var retweetText = ''
+    if(isRetweet) {
+        retweetText = `
+            <span>
+                <i class='fa fa-retweet'></i>
+                Retweet by <a href='/profile/${retweetBy}'>@${retweetBy}</a>
+            </span>
+        `
+    }
 
     return `<div class='post' data-id='${postData._id}'>
+                <div class='postActionContainer'>
+                    ${retweetText}
+                </div>
                 <div class='mainContentContainer'>
                     <div class='userImageContainer'>
                         <img src='${postedBy.profilePic}'/>
@@ -120,7 +166,10 @@ function createPostHtml(postData) {
                             </div>
                             <div class='postButtonContainer'>
                                 <button>
+                            <div class='postButtonContainer green'>
+                                <button class='retweetButton ${retweetButtonActiveClass}'>
                                     <i class='fa fa-retweet'></i>
+                                    <span>${postData.retweetUsers.length || ""}</span>
                                 </button>
                             </div>
                             <div class='postButtonContainer red'>

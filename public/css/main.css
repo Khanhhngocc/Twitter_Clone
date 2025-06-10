@@ -66,6 +66,7 @@ nav a:hover {
     display: flex;
     padding: var(--spacing);
     border-bottom: 10px solid rgb(230, 236, 240);
+    flex-shrink: 0;
 }
 
 .userImageContainer {
@@ -133,6 +134,7 @@ nav a:hover {
 
 .displayName {
     font-weight: bold;
+    text-decoration: none;
 }
 
 .postFooter {
@@ -169,4 +171,26 @@ nav a:hover {
 
 .postButtonContainer.red button.active {
     color: var(--red);
+    border-radius: 100%;
+}
+.postButtonContainer.red button:hover {
+    color: var(--red);
+    background: var(--redBackground);
+}
+
+.postButtonContainer.green button.active {
+    color: var(--green);
+}
+.postButtonContainer.green button:hover {
+    color: var(--green);
+    background: var(--greenBackground);
+}
+
+.postActionContainer {
+    padding-left: 35px;
+    font-size: 13px;
+    color: var(--greyText);
+    margin-bottom: 10px;
+}
+
 }
