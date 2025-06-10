@@ -4,18 +4,7 @@ const Post = require("../models/Post.model");
 
 //[GET] /api/posts
 module.exports.getPosts = async(req, res) => {
-    try {
-        const posts = await Post
-            .find()
-            .populate("postedBy")
-            .sort({ "createdAt" : -1 });
-        if(posts) {
-            res.status(200).send(posts);
-        }
-    } catch (error) {
         console.log(error);
-        res.sendStatus(400); 
-    }
 }
 
 //[POST] /api/posts
