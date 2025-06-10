@@ -102,53 +102,76 @@ document.addEventListener("click", async(e) => {
         }
     }
 })
-    // replyTextarea.addEventListener("keyup", (e) => { explain
-    //     const value = e.target.value.trim();
 
-    //     if(value == "") {
-    //         submitReplyButton.disabled = true;
-    //         return;
-    //     }
-    //     submitReplyButton.disabled = false;
-    // })
+// Reply Button
+const replyModal = document.querySelector("#replyModal");
+if(replyModal) {
+    const replyTextarea = replyModal.querySelector("#replyTextarea");
+    const submitReplyButton = document.querySelector("#submitReplyButton");
 
-        // submitReplyButton?.dataset?.postId = postId; //Chỉ để truy cập
-        // submitReplyButton.dataset.postId = postId;
-// Phuong phap sai
-// document.addEventListener("click", (e) => {
-//     const commentButton = e.target.closest(".commentButton");
-//     const submitReplyButton = e.target.closest("#submitReplyButton");
-    // const postId = getPostIdFromElement(commentButton); //explain lỗi
-    // if(commentButton){
-    //     const postId = getPostIdFromElement(commentButton);
-        // submitReplyButton.setAttribute("id", postId);  //explain lỗi
-    //     if (submitReplyButton) {
-    //         submitReplyButton.setAttribute("id", postId);
-    //     }
-        
-    // }
-//     if(submitReplyButton) {
-//         const postId = getPostIdFromElement(commentButton);
-//         const replyTextarea = document.getElementById("replyTextarea");
-//         let data = {
-//             content: replyTextarea.value.trim(),
-//             replyTo: postId
-//         }
-//         try {
-//             fetch(`api/posts/${postId}`, {
-//                 method: "POST",
-//                 headers: {
-//                     "Content-Type": "application/json"
-//                 },
-//                 body: JSON.stringify(data)
-//             })
-//             .then(response => response.json())
-//             .then(result => console.log(result))
-//         } catch (error) {
-//             console.log(error)
-//         }
-//     }
-// })
+    replyModal.addEventListener("show.bs.modal", (e) => {
+        const button = e.relatedTarget;
+        const postId = getPostIdFromElement(button);
+        const submitReplyButton = replyModal.querySelector("#submitReplyButton");
+        submitReplyButton.setAttribute("data-id", postId);
+
+
+        // Disabled Button
+        replyTextarea.value = "";
+        submitReplyButton.disabled = true;
+        replyTextarea.addEventListener("keyup", (e) => {
+            const value = e.target.value.trim();
+            submitReplyButton.disabled = value === "";
+        });
+
+        try {
+            fetch(`/api/posts/${postId}`, {
+                method: "GET"
+            })
+            .then(response => response.json())
+            .then(result => {
+                outputPosts(result, originalPostContainer)
+            })   
+        } catch (error) {
+            console.log(error)
+        }    
+    });
+
+    replyModal.addEventListener("hidden.bs.modal", (e) => {
+        const originalPostContainer = document.getElementById("originalPostContainer");
+        originalPostContainer.html = "";
+    })
+
+    submitReplyButton.addEventListener("click", () => {
+        const content = replyTextarea.value.trim();
+        const postId = submitReplyButton.getAttribute("data-id");
+
+        let data = {
+            content: content,
+            replyTo: postId
+        }
+
+        try {
+            fetch(`api/posts/${postId}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            })
+            .then(response => response.json())
+            .then(postData => {
+                if(postData) {
+                    location.reload()
+                }
+            })
+        } catch (error) {
+            console.log(error)
+        }
+
+    })
+}
+
 
 
 // Root Element contain data-id
@@ -190,6 +213,15 @@ function createPostHtml(postData) {
         `
     }
 
+    var replyFlag = '';
+    if(postData.replyTo) {
+        var replyToUsername = postData.replyTo.postedBy.userName;
+        if(replyToUsername) {
+            replyFlag = `<div class='replyFlag'>
+                            Replying to <a href='/profile/${replyToUsername}'>@${replyToUsername}</a>
+                        </div>`;
+        }
+    }
     return `<div class='post' data-id='${postData._id}'>
                 <div class='postActionContainer'>
                     ${retweetText}
@@ -204,17 +236,16 @@ function createPostHtml(postData) {
                             <span class='username'>@${postedBy.userName}</span>
                             <span class='date'>${timestamp}</span>
                         </div>
+                        ${replyFlag}
                         <div class='postBody'>
                             <span>${postData.content}</span>
                         </div>
                         <div class='postFooter'>
                             <div class='postButtonContainer'>
-                                <button>
+                                <button class='commentButton' data-bs-toggle="modal" data-bs-target="#replyModal">
                                     <i class='fa fa-comment'></i>
                                 </button>
                             </div>
-                            <div class='postButtonContainer'>
-                                <button>
                             <div class='postButtonContainer green'>
                                 <button class='retweetButton ${retweetButtonActiveClass}'>
                                     <i class='fa fa-retweet'></i>
@@ -231,6 +262,21 @@ function createPostHtml(postData) {
                     </div>
                 </div>
             </div>`
+}
+
+// Output Post function
+function outputPosts (results, container) {
+    container.innerHTML = "";
+
+    if(!Array.isArray(results)) {
+        results = [results]
+    }
+
+    results.forEach((result) => {
+        const safeResult = JSON.parse(JSON.stringify(result));
+        const html = createPostHtml(safeResult);
+        container.insertAdjacentHTML("beforeend", html);
+    });
 }
 
 function timeDifference(current, previous) {

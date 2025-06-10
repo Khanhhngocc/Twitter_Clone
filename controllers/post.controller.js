@@ -4,7 +4,20 @@ const Post = require("../models/Post.model");
 
 //[GET] /api/posts
 module.exports.getPosts = async(req, res) => {
+    await Post.find()
+    .populate("postedBy")
+    .populate("retweetData")
+    .populate("replyTo")
+    .sort({ "createdAt": -1 })
+    .then(async results => {
+        results = await User.populate(results, { path: "replyTo.postedBy" });
+        results = await User.populate(results, { path: "retweetData.postedBy" });
+        res.status(200).send(results);
+    })
+    .catch(error => {
         console.log(error);
+        res.sendStatus(400);
+    })
 }
 
 //[POST] /api/posts
@@ -94,3 +107,40 @@ module.exports.postRetweet = async(req, res) => {
 
     res.status(200).send(post);
 }
+
+//[GET] /api/posts/:id
+module.exports.getReply = async(req, res) => {
+    const postId = req.params.id;
+
+    await Post.findOne({_id: postId})
+    .populate("postedBy")
+    .populate("retweetData")
+    .then(async results => {
+        results = await User.populate(results, { path: "retweetData.postedBy" });
+        res.status(200).send(results);
+    })
+    .catch(error => {
+        console.log(error);
+        res.sendStatus(400);
+    })
+};
+
+//[POST] /apt/posts/:id
+module.exports.postReply = async(req, res) => {
+    const content = req.body.content;
+    const replyTo = req.body.replyTo;
+    req.body.postedBy = req.session.user
+
+    if(!content || !replyTo) return res.sendStatus(400);
+
+    Post.create(req.body)
+    .then(async newPost => {
+        newPost = await User.populate(newPost, { path: "postedBy" })
+        res.status(201).send(newPost)
+    })
+    .catch(error => {
+        console.log(error);
+        res.sendStatus(400)
+    })
+}
+

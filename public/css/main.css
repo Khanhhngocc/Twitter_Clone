@@ -193,4 +193,21 @@ nav a:hover {
     margin-bottom: 10px;
 }
 
+
+.modal .postFormContainer {
+    border: none;
+    padding: var(--spacing) 0 0 0;
+}
+
+.modal .post {
+    padding: 0 0  var(--spacing) 0;
+}
+
+
+.replyFlag {
+    margin-bottom: 5px;
+}
+
+.replyFlag a {
+    color: var(--blue);
 }
