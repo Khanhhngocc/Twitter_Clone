@@ -174,3 +174,15 @@ module.exports.getPost = (req, res) => {
         postId: req.params.id
     })
 }
+
+// [DELETE] /posts/:id
+module.exports.deletePost = (req, res) => {
+    const postId = req.params.id;
+
+    Post.findByIdAndDelete(postId)
+    .then(() => res.sendStatus(202))
+    .catch(error => {
+        console.log(error);
+        res.sendStatus(404);
+    })
+}

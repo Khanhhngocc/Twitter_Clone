@@ -13,4 +13,6 @@ router.post("/:id/retweet", controller.postRetweet);
 router.get("/:id", controller.getReply);
 router.post("/:id", controller.postReply);
 
+router.delete("/:id", controller.deletePost);
+
 module.exports = router;

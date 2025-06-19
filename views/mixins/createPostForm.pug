@@ -25,3 +25,21 @@ mixin createReplyModal(userLoggedIn)
           .modal-footer
             button#closeReplyButton.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
             button#submitReplyButton.btn.btn-primary(type='button') Reply
+
+mixin createDeletePostModal(userLoggedIn)
+    #deletePostModal.modal.fade(tabindex='-1', aria-labelledby='deletePostModalLabel', aria-hidden='true')
+      .modal-dialog(role='document')
+        .modal-content
+          .modal-header
+            h5#deletePostModalLabel.modal-title Delete the post?
+            button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
+          .modal-body
+            p This can’t be undone and it will be removed from your profile, the timeline of any accounts that follow you, and from search results. 
+          .modal-footer
+            button.btn.btn-secondary(type='button', data-bs-dismiss='modal') Close
+            button#deletePostButton.btn.btn-primary(type='button') Delete
+
+
+mixin createPostModals(userLoggedIn)
+  +createReplyModal(userLoggedIn)
+  +createDeletePostModal(userLoggedIn)
