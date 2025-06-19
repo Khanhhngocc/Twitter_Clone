@@ -112,11 +112,32 @@ module.exports.postRetweet = async(req, res) => {
 module.exports.getReply = async(req, res) => {
     const postId = req.params.id;
 
+    const results = {};
+
     await Post.findOne({_id: postId})
     .populate("postedBy")
     .populate("retweetData")
-    .then(async results => {
-        results = await User.populate(results, { path: "retweetData.postedBy" });
+    .then(async postData => {
+        
+        postData = await User.populate(postData, { path: "retweetData.postedBy" });
+
+        results.postData = postData;
+        
+        if(postData.replyTo !== undefined) {
+            results.replyTo = postData.replyTo;
+        }
+
+        let replies = await Post.find({ replyTo: postId })
+                            .populate("postedBy")
+                            .populate("retweetData")
+                            .populate("replyTo");
+
+        replies = await User.populate(replies, { path: "replyTo.postedBy" });
+        replies = await User.populate(replies, { path: "retweetData.postedBy" });
+
+
+        results.replies = replies;
+
         res.status(200).send(results);
     })
     .catch(error => {
@@ -125,7 +146,7 @@ module.exports.getReply = async(req, res) => {
     })
 };
 
-//[POST] /apt/posts/:id
+//[POST] /api/posts/:id
 module.exports.postReply = async(req, res) => {
     const content = req.body.content;
     const replyTo = req.body.replyTo;
@@ -144,3 +165,12 @@ module.exports.postReply = async(req, res) => {
     })
 }
 
+//[GET] /posts/:id
+module.exports.getPost = (req, res) => {
+    res.render("pages/post/index", {
+        pageTitle: "View post",
+        userLoggedIn: req.session.user,
+        userLoggedInJs: JSON.stringify(req.session.user),
+        postId: req.params.id
+    })
+}

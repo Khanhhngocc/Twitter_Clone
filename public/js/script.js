@@ -129,8 +129,8 @@ if(replyModal) {
                 method: "GET"
             })
             .then(response => response.json())
-            .then(result => {
-                outputPosts(result, originalPostContainer)
+            .then(results => {
+                outputPosts(results.postData, originalPostContainer)
             })   
         } catch (error) {
             console.log(error)
@@ -152,7 +152,7 @@ if(replyModal) {
         }
 
         try {
-            fetch(`api/posts/${postId}`, {
+            fetch(`/api/posts/${postId}`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -172,6 +172,19 @@ if(replyModal) {
     })
 }
 
+document.addEventListener("click", (e) => {
+    if(e.target.closest(".post")){
+        if(e.target.closest("button")) return;
+
+        const element = e.target;
+        const postId = getPostIdFromElement(element);
+
+        if(postId) {
+            window.location.href = "/posts/" + postId;
+            console.log(window.location.href)
+        }
+    }
+})
 
 
 // Root Element contain data-id
@@ -186,7 +199,7 @@ function getPostIdFromElement(element) {
     return postId;
 }
 
-function createPostHtml(postData) {
+function createPostHtml(postData, largeFont = false) {
 
     let isRetweet = postData.retweetData !== undefined;
     let retweetBy = isRetweet ? postData.postedBy.userName : null;
@@ -202,6 +215,7 @@ function createPostHtml(postData) {
 
     const likeButtonActiveClass = postData.likes.includes(userLoggedIn._id) ? "active" : ""
     const retweetButtonActiveClass = postData.retweetUsers.includes(userLoggedIn._id) ? "active" : "";
+    const largeFontClass = largeFont ? "largeFont" : ""
 
     var retweetText = ''
     if(isRetweet) {
@@ -214,7 +228,16 @@ function createPostHtml(postData) {
     }
 
     var replyFlag = '';
-    if(postData.replyTo) {
+    if(postData.replyTo && postData.replyTo._id) {
+        if(!postData.replyTo._id){
+            console.log("replyTo is not populated");
+            return;
+        }
+        else if (!postData.replyTo.postedBy._id){
+            console.log("postedBy is not populated");
+            return;
+        }
+
         var replyToUsername = postData.replyTo.postedBy.userName;
         if(replyToUsername) {
             replyFlag = `<div class='replyFlag'>
@@ -222,7 +245,7 @@ function createPostHtml(postData) {
                         </div>`;
         }
     }
-    return `<div class='post' data-id='${postData._id}'>
+    return `<div class='post ${largeFontClass}' data-id='${postData._id}'>
                 <div class='postActionContainer'>
                     ${retweetText}
                 </div>
@@ -276,6 +299,24 @@ function outputPosts (results, container) {
         const safeResult = JSON.parse(JSON.stringify(result));
         const html = createPostHtml(safeResult);
         container.insertAdjacentHTML("beforeend", html);
+    });
+}
+
+// Output Post Replies
+function outputPostsWithReplies(results, container) {
+    container.innerHTML = "";
+
+    if(results.replyTo !== undefined && results.replyTo._id !== undefined) {
+        let html = createPostHtml(results.replyTo);
+        container.innerHTML += html;
+    }
+
+    const mainPostHtml = createPostHtml(results.postData);
+    container.innerHTML += mainPostHtml; 
+
+    results.replies.forEach(result => {
+        let html = createPostHtml(result, true);
+        container.innerHTML += html;
     });
 }
 

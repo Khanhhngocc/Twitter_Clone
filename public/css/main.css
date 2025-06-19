@@ -210,4 +210,11 @@ nav a:hover {
 
 .replyFlag a {
     color: var(--blue);
+/* Delete Post */
+.postContentContainer .postHeader {
+    display: flex;
+}
+
+.postContentContainer .postHeader .date{
+    flex: 1;
 }

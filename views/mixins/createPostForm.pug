@@ -15,10 +15,9 @@ mixin createReplyModal(userLoggedIn)
           .modal-header
             h5#replyModalLabel.modal-title Reply
             button.btn-close(type='button', data-bs-dismiss='modal', aria-label='Close')
-              //- span(aria-hidden='true') &times;
           .modal-body
             #originalPostContainer
-            .postFormContainer 
+            .postModalFormContainer 
                 .userImageContainer
                     img(src= userLoggedIn.profilePic, alt="User's profile picture")
                 .textareaContainer 
