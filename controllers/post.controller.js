@@ -4,7 +4,31 @@ const Post = require("../models/Post.model");
 
 //[GET] /api/posts
 module.exports.getPosts = async(req, res) => {
-    await Post.find()
+    let find = {};
+    if(req.query.postedBy) {
+        find.postedBy = req.query.postedBy
+        if(req.query.isReply){
+            const isReply = req.query.isReply == "true";
+            find.replyTo = { $exists: isReply };
+        }
+    }
+
+    if(req.query.followingOnly) {
+        const userFollowingIds = [];
+
+        if(!req.session.user.following) {
+            req.session.user.following = [];
+        }
+
+        req.session.user.following.forEach(user => {
+            userFollowingIds.push(user);    
+        });
+
+        userFollowingIds.push(req.session.user._id);
+        find.postedBy = { $in: userFollowingIds };
+    }
+
+    await Post.find(find)
     .populate("postedBy")
     .populate("retweetData")
     .populate("replyTo")

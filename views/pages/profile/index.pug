@@ -1,0 +1,58 @@
+extends ../../layouts/main-layout.pug
+
+block content 
+
+    if !profileUser
+        h1.errorMessage Check the url you try to access 
+
+    else 
+        script.
+            var profileUserId = '!{profileUser._id}'
+            var selectedTab = '!{selectedTab}'
+        
+        -followersCount = profileUser.followers.length
+        -followingCount = profileUser.following.length
+
+        .profileHeaderContainer
+            .coverPhotoSection
+                .coverPhotoContainer
+                .userImageContainer 
+                    img(src=profileUser.profilePic, alt="User profile picture")
+
+            .profileButtonsContainer  
+                if profileUser._id != userLoggedIn._id 
+                    a.profileButton(href=`/messages/${profileUser._id}`)
+                        i.fas.fa-envelope
+                    
+                    - var profileUserId = profileUser._id.toString();
+                    - if(userLoggedIn.following && userLoggedIn.following.includes(profileUserId))
+                        +createFollowButton(profileUser, true)
+                    - else 
+                        +createFollowButton(profileUser, false)
+                else 
+                    button.editProfileButton(data-bs-toggle="modal", data-bs-target="#editInformationModal") Edit profile
+
+            .userDetailsContainer
+                span.displayName #{profileUser.firstName} #{profileUser.lastName}
+                span.username @#{profileUser.userName}
+                span.description #{profileUser.description}
+
+                .followersContainer 
+                    a(href=`/profile/${profileUser.userName}/following`)
+                        span.value #{followingCount}
+                        span Following
+                    a(href=`/profile/${profileUser.userName}/followers`)
+                        span.followersValue.value #{followersCount}
+                        span Followers
+
+        .tabsContainer 
+            +createTab("Posts", `/profile/${profileUser.userName}`, selectedTab != "replies")
+            +createTab("Replies", `/profile/${profileUser.userName}/replies`, selectedTab == "replies")
+
+        .postsContainer
+
+        +createPostModals(userLoggedIn)
+        +createEditInformationModal(userLoggedIn)
+
+block script 
+    script(src="/js/profile.js") 

@@ -217,6 +217,47 @@ if(deletePostModal) {
     })
 }
 
+// Follow Button
+document.addEventListener("click", (e) => {
+    if(e.target.closest(".followButton")){
+        const button = e.target.closest(".followButton");
+        const userId = button.getAttribute("data-user");
+
+        try {
+            fetch(`/api/users/${userId}/follow`, {
+            method: "PATCH"
+        })
+        .then(response => {
+            if(response.status === 404){
+                alert("User not found");
+                return;
+            }
+            return response.json()
+        })
+        .then(userLoggedIn => {
+            let difference = 1
+            if(userLoggedIn.following && userLoggedIn.following.includes(userId)){
+                button.classList.add("following");
+                button.innerHTML = "Following";
+            } else {
+                button.classList.remove("following")
+                button.innerHTML = "Follow";
+                difference = -1
+            }
+
+            const followersValue = document.querySelector(".followersValue");
+            if(followersValue){
+                const followersText = followersValue.innerHTML;
+                followersValue.innerHTML = (parseInt(followersText) + difference);
+            }
+        })
+        } catch (error) {
+            console.log(error);
+        }
+        
+    }
+})
+
 
 // Root Element contain data-id
 function getPostIdFromElement(element) {
@@ -279,7 +320,7 @@ function createPostHtml(postData, largeFont = false) {
 
     var buttons = "";
     if(postedBy._id == userLoggedIn._id){
-        buttons = `<button data-id="${postData._id}" data-bs-toggle="modal" data-bs-target="#deletePostModal"><i class="fa-solid fa-xmark"></i></button>`
+                    <button data-id="${postData._id}" data-bs-toggle="modal" data-bs-target="#deletePostModal"><i class="fa-solid fa-xmark"></i></button>`
     }
 
     return `<div class='post ${largeFontClass}' data-id='${postData._id}'>
