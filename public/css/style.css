@@ -1,0 +1,605 @@
+@charset "UTF-8";
+* {
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  outline: none !important;
+}
+
+button {
+  background-color: transparent;
+  border: none;
+  color: rgba(0, 0, 0, 0.34);
+}
+button span {
+  pointer-events: none;
+}
+button i {
+  pointer-events: none;
+}
+
+.row {
+  width: 100%;
+}
+
+.wrapper > .row {
+  margin: 0;
+}
+
+.noResults {
+  padding: 15px;
+}
+
+.wrapper {
+  display: flex;
+  justify-content: center;
+}
+
+.loginContainer {
+  text-align: center;
+  padding: 20px;
+  width: 80%;
+  max-width: 500px;
+  border: 1px solid #dedede;
+  background-color: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -webkit-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 1px 4px rgba(0, 0, 0, 0.3);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type=text],
+input[type=email],
+input[type=password] {
+  margin-bottom: 20px;
+  padding: 5px 10px;
+  border-radius: 2px;
+  border: 1px solid #dedede;
+  /* background-color: var(--gray); */
+}
+
+input[type=submit] {
+  background-color: #1FA2F1;
+  border: none;
+  color: #fff;
+  border-radius: 2px;
+  margin-bottom: 10px;
+  padding: 10px;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+a:hover {
+  color: inherit;
+  text-decoration: none;
+}
+
+h1 {
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: 100%;
+}
+nav a {
+  padding: 10px;
+  font-size: 30px;
+  width: 55px;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #212529;
+}
+nav a.blue {
+  color: #1FA2F1;
+}
+nav a:hover {
+  background-color: #D4EDFF;
+  color: #1FA2F1;
+  border-radius: 50%;
+}
+
+.mainSectionContainer {
+  padding: 0;
+  border-left: 1px solid rgb(230, 236, 240);
+  border-right: 1px solid rgb(230, 236, 240);
+  display: flex;
+  flex-direction: column;
+}
+.mainSectionContainer .titleContainer {
+  height: 53px;
+  padding: 0 15px;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgb(230, 236, 240);
+  flex-shrink: 0;
+}
+.mainSectionContainer .titleContainer h1 {
+  flex: 1;
+}
+
+.textareaContainer, .postModalFormContainer .textareaContainer, .postFormContainer .textareaContainer {
+  flex: 1;
+  padding-left: 15px;
+}
+.textareaContainer textarea, .postModalFormContainer .textareaContainer textarea, .postFormContainer .textareaContainer textarea {
+  width: 100%;
+  border: none;
+  resize: none;
+  font-size: 19px;
+}
+
+.post {
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  cursor: pointer;
+  border-bottom: 1px solid rgb(230, 236, 240);
+  flex-shrink: 0;
+}
+.post .postActionContainer {
+  padding-left: 35px;
+  font-size: 13px;
+  color: rgb(101, 119, 134);
+  margin-bottom: 10px;
+}
+.post .mainContentContainer {
+  flex: 1;
+  display: flex;
+}
+.post .mainContentContainer .userImageContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+}
+.post .mainContentContainer .userImageContainer img {
+  border-radius: 50%;
+  background-color: white;
+  width: 100%;
+  border: 4px solid #fff;
+}
+.post .mainContentContainer .postContentContainer {
+  padding-left: 15px;
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+.post .mainContentContainer .postContentContainer .postHeader {
+  display: flex;
+  align-items: center;
+}
+.post .mainContentContainer .postContentContainer .postHeader a,
+.post .mainContentContainer .postContentContainer .postHeader span {
+  padding-right: 5px;
+}
+.post .mainContentContainer .postContentContainer .postHeader a:hover {
+  text-decoration: underline;
+}
+.post .mainContentContainer .postContentContainer .postHeader .displayName {
+  font-weight: bold;
+  text-decoration: none;
+}
+.post .mainContentContainer .postContentContainer .postHeader .username, .post .mainContentContainer .postContentContainer .postHeader .date {
+  color: rgb(101, 119, 134);
+}
+.post .mainContentContainer .postContentContainer .postHeader .date {
+  flex: 1;
+}
+.post .mainContentContainer .postContentContainer .postHeader button {
+  margin-left: 15px;
+}
+.post .mainContentContainer .postContentContainer .replyFlag {
+  margin-bottom: 5px;
+}
+.post .mainContentContainer .postContentContainer .replyFlag a {
+  color: #1FA2F1;
+}
+.post .mainContentContainer .postContentContainer .postFooter {
+  display: flex;
+  align-items: center;
+}
+.post .mainContentContainer .postContentContainer .postFooter .postButtonContainer {
+  display: flex;
+  flex: 1;
+}
+.post .mainContentContainer .postContentContainer .postFooter .postButtonContainer.red button.active {
+  color: rgb(226, 34, 94);
+  border-radius: 100%;
+}
+.post .mainContentContainer .postContentContainer .postFooter .postButtonContainer.red button:hover {
+  color: rgb(226, 34, 94);
+  background: rgba(226, 34, 94, 0.1);
+}
+.post .mainContentContainer .postContentContainer .postFooter .postButtonContainer.green button.active {
+  color: rgb(23, 191, 99);
+}
+.post .mainContentContainer .postContentContainer .postFooter .postButtonContainer.green button:hover {
+  color: rgb(23, 191, 99);
+  background: rgba(23, 191, 99, 0.1);
+}
+.post .mainContentContainer .postContentContainer .postFooter .postButtonContainer button {
+  padding: 2px 5px;
+}
+
+.postFormContainer {
+  display: flex;
+  padding: 15px;
+  border-bottom: 10px solid rgb(230, 236, 240);
+  flex-shrink: 0;
+}
+.postFormContainer .userImageContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+}
+.postFormContainer .userImageContainer img {
+  border-radius: 50%;
+  background-color: white;
+  width: 100%;
+  border: 4px solid #fff;
+}
+.postFormContainer #submitPostButton {
+  background-color: #1FA2F1;
+  color: white;
+  border: none;
+  border-radius: 40px;
+  padding: 7px 15px;
+}
+.postFormContainer #submitPostButton:disabled {
+  background-color: #9BD1F9;
+}
+
+.postModalFormContainer {
+  display: flex;
+  padding: 15px;
+  border-bottom: 10px solid rgb(230, 236, 240);
+  flex-shrink: 0;
+}
+.postModalFormContainer .userImageContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+}
+.postModalFormContainer .userImageContainer img {
+  border-radius: 50%;
+  background-color: white;
+  width: 100%;
+  border: 4px solid #fff;
+}
+.postModalFormContainer .post {
+  padding: 0 0 15px 0;
+}
+
+.post.largeFont .postBody,
+.post.largeFont .postFooter {
+  font-size: 23px;
+}
+
+.errorMessage {
+  padding: 15px;
+}
+
+.profileHeaderContainer .coverPhotoSection {
+  height: 180px;
+  background: #1FA2F1;
+  position: relative;
+}
+.profileHeaderContainer .coverPhotoSection .userImageContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  bottom: -66px;
+  margin-left: 15px;
+}
+.profileHeaderContainer .coverPhotoSection .userImageContainer img {
+  border-radius: 50%;
+  background-color: white;
+  width: 100%;
+  border: 4px solid #fff;
+}
+.profileHeaderContainer .coverPhotoSection .userImageContainer img {
+  border: 4px solid #fff;
+}
+.profileHeaderContainer .profileButtonsContainer {
+  text-align: right;
+  padding: 15px;
+  min-height: 66px;
+}
+.profileHeaderContainer .profileButtonsContainer .profileButton, .profileHeaderContainer .profileButtonsContainer .followButton {
+  border: 1px solid #1FA2F1;
+  padding: 5px 15px;
+  border-radius: 60px;
+  color: #1FA2F1 !important;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 15px;
+}
+.profileHeaderContainer .profileButtonsContainer .profileButton:hover, .profileHeaderContainer .profileButtonsContainer .followButton:hover {
+  background: rgba(212, 237, 255, 0.6);
+}
+.profileHeaderContainer .profileButtonsContainer .followButton:hover {
+  background: rgba(212, 237, 255, 0.6);
+}
+.profileHeaderContainer .profileButtonsContainer .editProfileButton {
+  border: 1px solid #1FA2F1;
+  padding: 5px 15px;
+  border-radius: 60px;
+  color: #1FA2F1 !important;
+  font-weight: bold;
+  display: inline-block;
+  margin-left: 15px;
+}
+.profileHeaderContainer .profileButtonsContainer .editProfileButton:hover {
+  background-color: #D4EDFF;
+  color: #1FA2F1;
+}
+.profileHeaderContainer .userDetailsContainer {
+  display: flex;
+  flex-direction: column;
+  padding: 0 15px;
+}
+.profileHeaderContainer .userDetailsContainer .username, .profileHeaderContainer .userDetailsContainer .post .mainContentContainer .postContentContainer .postHeader .date, .post .mainContentContainer .postContentContainer .postHeader .profileHeaderContainer .userDetailsContainer .date {
+  color: rgb(101, 119, 134);
+}
+.profileHeaderContainer .userDetailsContainer .displayName {
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 20px;
+}
+.profileHeaderContainer .userDetailsContainer .followersContainer .value {
+  font-weight: bold;
+  margin-right: 5px;
+}
+.profileHeaderContainer .userDetailsContainer .followersContainer span:not(.value) {
+  color: rgb(101, 119, 134);
+}
+.profileHeaderContainer .userDetailsContainer .followersContainer a {
+  margin-right: 15px;
+}
+.profileHeaderContainer .userDetailsContainer .followersContainer a:hover {
+  border-bottom: 1px solid #000;
+}
+
+.tabsContainer {
+  margin-top: 20px;
+  display: flex;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  flex-shrink: 0;
+}
+.tabsContainer .tabs {
+  flex: 1;
+  height: 55px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(101, 119, 134);
+  font-weight: bold;
+}
+.tabsContainer .tabs.active {
+  color: #1FA2F1;
+  border-bottom: 2px solid #1FA2F1;
+}
+.tabsContainer .tabs:hover {
+  color: #1FA2F1;
+  background: rgba(212, 237, 255, 0.6);
+}
+
+.resultsContainer {
+  display: flex;
+  flex-direction: column;
+}
+.resultsContainer .user {
+  display: flex;
+  padding: 15px;
+  border-bottom: 1px solid rgb(230, 236, 240);
+}
+.resultsContainer .user .userImageContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+}
+.resultsContainer .user .userImageContainer img {
+  border-radius: 50%;
+  background-color: white;
+  width: 100%;
+  border: 4px solid #fff;
+}
+.resultsContainer .user .userDetailsContainer {
+  flex: 1;
+  padding: 0 15px;
+}
+
+#editInformationModal .userImageContainer {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  overflow: hidden;
+  background-color: white;
+}
+#editInformationModal .userImageContainer img {
+  border-radius: 50%;
+  background-color: white;
+  width: 100%;
+  border: 4px solid #fff;
+}
+#editInformationModal .modal-dialog {
+  max-width: 500px;
+  margin: 1.75rem auto;
+  max-height: 650px;
+}
+#editInformationModal .modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#editInformationModal .modal-content .modal-header {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#editInformationModal .modal-content .modal-header .modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+#editInformationModal .modal-content .modal-header .modal-body {
+  padding: 0 20px;
+}
+#editInformationModal .modal-content .modal-header .modal-footer {
+  padding: 10px 20px;
+  text-align: right;
+}
+#editInformationModal .modal-content .modal-header .modal-footer .btn {
+  padding: 10px 20px;
+}
+#editInformationModal .modal-content .modal-body {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+#editInformationModal .modal-header {
+  padding: 10px 20px;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#editInformationModal .modal-header .modal-title {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+#editInformationModal .modal-header .modal-body {
+  padding: 0 20px;
+}
+#editInformationModal .modal-header .modal-footer {
+  padding: 10px 20px;
+  text-align: right;
+}
+#editInformationModal .modal-header .modal-footer .btn {
+  padding: 10px 20px;
+}
+#editInformationModal .modal-body .coverPhotoSection {
+  height: 180px;
+  background: #1FA2F1;
+  position: relative;
+  padding: 0 5px;
+  margin-bottom: 80px;
+}
+#editInformationModal .modal-body .coverPhotoSection .coverPhotoContainer i, #editInformationModal .modal-body .coverPhotoSection .userImageContainer i {
+  position: absolute;
+  font-size: 50px;
+  color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#editInformationModal .modal-body .coverPhotoSection .coverPhotoContainer #filePhoto, #editInformationModal .modal-body .coverPhotoSection .userImageContainer #filePhoto {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+}
+#editInformationModal .modal-body .coverPhotoSection .userImageContainer {
+  position: absolute;
+  width: 130px;
+  height: 130px;
+  bottom: -66px;
+  margin-left: 15px;
+}
+#editInformationModal .modal-body .coverPhotoSection .userImageContainer img {
+  border: 4px solid #fff;
+}
+#editInformationModal .form-label {
+  font-weight: 600;
+}
+#editInformationModal .form-control {
+  width: 100%;
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+#editInformationModal .form-control:focus {
+  border-color: #007bff;
+}
+
+#uploadImageModal .modal-dialog {
+  max-width: 500px;
+  max-height: 650px; /* Giới hạn chiều cao modal */
+}
+#uploadImageModal .modal-dialog .modal-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+#uploadImageModal .modal-dialog .modal-content .modal-body {
+  display: flex; /* Sử dụng flexbox để căn giữa hoặc phân bổ không gian cho imagePreviewContainer */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  justify-content: center; /* Căn giữa theo chiều ngang */
+  padding: 15px; /* Thêm padding nếu muốn khoảng trống xung quanh ảnh */
+  overflow: hidden; /* Đảm bảo không có scrollbar không mong muốn nếu ảnh lớn */
+  flex-grow: 1; /* Cho phép body mở rộng để chiếm không gian */
+}
+#uploadImageModal .modal-dialog .modal-content .modal-body .imagePreviewContainer {
+  width: 100%; /* Chiếm hết chiều rộng của modal-body */
+  height: 100%; /* Chiếm hết chiều cao của modal-body */
+  display: flex; /* Dùng flexbox để căn giữa ảnh Cropper */
+  align-items: center;
+  justify-content: center;
+  overflow: hidden; /* Đảm bảo không bị tràn */
+}
+#uploadImageModal .modal-dialog .modal-content .modal-body .imagePreviewContainer #imagePreview {
+  display: block; /* Quan trọng để remove khoảng trắng bên dưới ảnh */
+  width: 100%; /* Đảm bảo ảnh không tràn ra ngoài container */
+  height: auto; /* Đảm bảo ảnh chiếm hết chiều cao của container */
+  object-fit: contain; /* Giữ tỷ lệ ảnh và fit vào container */
+  max-width: 100%;
+  max-height: 100%;
+}
+#uploadImageModal .cropper-container {
+  width: 100%; /* Đảm bảo vùng Cropper không tràn */
+  height: 100%; /* Đảm bảo vùng Cropper chiếm hết không gian của container */
+}
+#uploadImageModal .cropper-view-box,
+#uploadImageModal #uploadImageModal .cropper-canvas {
+  width: 100%; /* Đảm bảo vùng cắt không bị tràn */
+  height: 100%; /* Đảm bảo vùng cắt chiếm hết không gian */
+}
+
+/*# sourceMappingURL=style.css.map */
